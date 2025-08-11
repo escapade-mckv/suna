@@ -35,8 +35,7 @@ interface FormData {
   configured_mcps: any[];
   custom_mcps: any[];
   is_default: boolean;
-  avatar: string;
-  avatar_color: string;
+  profile_img_url: string;
 }
 
 export default function AgentConfigurationPage() {
@@ -48,7 +47,7 @@ export default function AgentConfigurationPage() {
   const searchParams = useSearchParams();
   const tabParam = searchParams.get('tab');
   const initialAccordion = searchParams.get('accordion');
-  const versionParam = searchParams.get('version');  // Add this line
+  const versionParam = searchParams.get('version');
   const { setHasUnsavedChanges } = useAgentVersionStore();
   
   const updateAgentMutation = useUpdateAgent();
@@ -65,8 +64,7 @@ export default function AgentConfigurationPage() {
     configured_mcps: [],
     custom_mcps: [],
     is_default: false,
-    avatar: '',
-    avatar_color: '',
+    profile_img_url: '',
   });
 
   const [originalData, setOriginalData] = useState<FormData>(formData);
@@ -94,8 +92,7 @@ export default function AgentConfigurationPage() {
       configured_mcps: configSource.configured_mcps || [],
       custom_mcps: configSource.custom_mcps || [],
       is_default: agent.is_default || false,
-      avatar: agent.avatar || '',
-      avatar_color: agent.avatar_color || '',
+              profile_img_url: agent.profile_img_url || '',
     };
     
     setFormData(initialData);
@@ -151,8 +148,7 @@ export default function AgentConfigurationPage() {
           name: formData.name,
           description: formData.description,
           is_default: formData.is_default,
-          avatar: formData.avatar,
-          avatar_color: formData.avatar_color
+          profile_img_url: formData.profile_img_url
         })
       ]);
       

@@ -74,8 +74,7 @@ class AgentCreateRequest(BaseModel):
     custom_mcps: Optional[List[Dict[str, Any]]] = []
     agentpress_tools: Optional[Dict[str, Any]] = {}
     is_default: Optional[bool] = False
-    avatar: Optional[str] = None
-    avatar_color: Optional[str] = None
+    profile_img_url: Optional[str] = None
 
 class AgentVersionResponse(BaseModel):
     version_id: str
@@ -108,8 +107,7 @@ class AgentUpdateRequest(BaseModel):
     custom_mcps: Optional[List[Dict[str, Any]]] = None
     agentpress_tools: Optional[Dict[str, Any]] = None
     is_default: Optional[bool] = None
-    avatar: Optional[str] = None
-    avatar_color: Optional[str] = None
+    profile_img_url: Optional[str] = None
 
 class AgentResponse(BaseModel):
     agent_id: str
@@ -121,8 +119,7 @@ class AgentResponse(BaseModel):
     custom_mcps: List[Dict[str, Any]]
     agentpress_tools: Dict[str, Any]
     is_default: bool
-    avatar: Optional[str] = None
-    avatar_color: Optional[str] = None
+    profile_img_url: Optional[str] = None
     created_at: str
     updated_at: Optional[str] = None
     is_public: Optional[bool] = False
@@ -1926,8 +1923,7 @@ async def create_agent(
             "account_id": user_id,
             "name": agent_data.name,
             "description": agent_data.description,
-            "avatar": agent_data.avatar,
-            "avatar_color": agent_data.avatar_color,
+            "profile_img_url": agent_data.profile_img_url,
             "is_default": agent_data.is_default or False,
             "version_count": 1
         }
@@ -1995,8 +1991,7 @@ async def create_agent(
             is_default=agent.get('is_default', False),
             is_public=agent.get('is_public', False),
             tags=agent.get('tags', []),
-            avatar=agent.get('avatar'),
-            avatar_color=agent.get('avatar_color'),
+            profile_img_url=agent.get('profile_img_url'),
             created_at=agent['created_at'],
             updated_at=agent.get('updated_at', agent['created_at']),
             current_version_id=agent.get('current_version_id'),
@@ -2217,10 +2212,8 @@ async def update_agent(
             update_data["is_default"] = agent_data.is_default
             if agent_data.is_default:
                 await client.table('agents').update({"is_default": False}).eq("account_id", user_id).eq("is_default", True).neq("agent_id", agent_id).execute()
-        if agent_data.avatar is not None:
-            update_data["avatar"] = agent_data.avatar
-        if agent_data.avatar_color is not None:
-            update_data["avatar_color"] = agent_data.avatar_color
+        if agent_data.profile_img_url is not None:
+            update_data["profile_img_url"] = agent_data.profile_img_url
         
         current_system_prompt = agent_data.system_prompt if agent_data.system_prompt is not None else current_version_data.get('system_prompt', '')
         current_configured_mcps = agent_data.configured_mcps if agent_data.configured_mcps is not None else current_version_data.get('configured_mcps', [])
@@ -2234,8 +2227,7 @@ async def update_agent(
             current_custom_mcps = current_version_data.get('custom_mcps', [])
             
         current_agentpress_tools = agent_data.agentpress_tools if agent_data.agentpress_tools is not None else current_version_data.get('agentpress_tools', {})
-        current_avatar = agent_data.avatar if agent_data.avatar is not None else existing_data.get('avatar')
-        current_avatar_color = agent_data.avatar_color if agent_data.avatar_color is not None else existing_data.get('avatar_color')
+        current_profile_img_url = agent_data.profile_img_url if agent_data.profile_img_url is not None else existing_data.get('profile_img_url')
         new_version_id = None
         if needs_new_version:
             try:

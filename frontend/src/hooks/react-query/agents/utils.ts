@@ -27,8 +27,7 @@ export type Agent = {
   tags?: string[];
   created_at: string;
   updated_at: string;
-  avatar?: string;
-  avatar_color?: string;
+  profile_img_url?: string;
   current_version_id?: string | null;
   version_count?: number;
   current_version?: AgentVersion | null;
@@ -147,8 +146,7 @@ export type AgentUpdateRequest = {
   }>;
   agentpress_tools?: Record<string, any>;
   is_default?: boolean;
-  avatar?: string;
-  avatar_color?: string;
+  profile_img_url?: string;
 };
 
 export const getAgents = async (params: AgentsParams = {}): Promise<AgentsResponse> => {

@@ -55,13 +55,9 @@ class AgentConfigTool(AgentBuilderBaseTool):
                         }
                     },
 
-                    "avatar": {
+                    "profile_img_url": {
                         "type": "string",
-                        "description": "Emoji to use as the agent's avatar."
-                    },
-                    "avatar_color": {
-                        "type": "string",
-                        "description": "Hex color code for the agent's avatar background."
+                        "description": "URL to the agent's profile image (uploaded or AI-generated)."
                     }
                 },
                 "required": []
@@ -75,8 +71,7 @@ class AgentConfigTool(AgentBuilderBaseTool):
         <parameter name="description">An AI assistant specialized in conducting research and providing comprehensive analysis</parameter>
         <parameter name="system_prompt">You are a research assistant with expertise in gathering, analyzing, and synthesizing information. Your approach is thorough and methodical...</parameter>
                         <parameter name="agentpress_tools">{"web_search_tool": true, "sb_files_tool": true, "sb_shell_tool": false}</parameter>
-        <parameter name="avatar">🔬</parameter>
-        <parameter name="avatar_color">#4F46E5</parameter>
+        <parameter name="profile_img_url">https://example.com/research-agent.jpg</parameter>
         </invoke>
         </function_calls>
         ''')
@@ -87,8 +82,7 @@ class AgentConfigTool(AgentBuilderBaseTool):
         system_prompt: Optional[str] = None,
         agentpress_tools: Optional[Dict[str, Dict[str, Any]]] = None,
         configured_mcps: Optional[list] = None,
-        avatar: Optional[str] = None,
-        avatar_color: Optional[str] = None
+        profile_img_url: Optional[str] = None
     ) -> ToolResult:
         try:
             account_id = await self._get_current_account_id()
@@ -126,10 +120,8 @@ class AgentConfigTool(AgentBuilderBaseTool):
                 agent_update_fields["name"] = name
             if description is not None:
                 agent_update_fields["description"] = description
-            if avatar is not None:
-                agent_update_fields["avatar"] = avatar
-            if avatar_color is not None:
-                agent_update_fields["avatar_color"] = avatar_color
+            if profile_img_url is not None:
+                agent_update_fields["profile_img_url"] = profile_img_url
                 
             config_changed = (system_prompt is not None or agentpress_tools is not None or configured_mcps is not None)
             
@@ -305,8 +297,7 @@ class AgentConfigTool(AgentBuilderBaseTool):
                 "name": agent_config.get("name", "Untitled Agent"),
                 "description": agent_config.get("description", "No description set"),
                 "system_prompt": agent_config.get("system_prompt", "No system prompt set"),
-                "avatar": agent_config.get("avatar", "🤖"),
-                "avatar_color": agent_config.get("avatar_color", "#6B7280"),
+                "profile_img_url": agent_config.get("profile_img_url"),
                 "agentpress_tools": agent_config.get("agentpress_tools", {}),
                 "configured_mcps": agent_config.get("configured_mcps", []),
                 "custom_mcps": agent_config.get("custom_mcps", []),

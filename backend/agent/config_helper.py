@@ -83,15 +83,11 @@ def extract_agent_config(agent_data: Dict[str, Any], version_data: Optional[Dict
         config['custom_mcps'] = tools.get('custom_mcp', [])
         config['agentpress_tools'] = _extract_agentpress_tools_for_run(tools.get('agentpress', {}))
         
-        config['avatar'] = agent_data.get('avatar')
-        config['avatar_color'] = agent_data.get('avatar_color')
+        config['profile_img_url'] = agent_data.get('profile_img_url')
         
         return config
     
-    # Fallback: Create default configuration for agents without version or config data
     logger.warning(f"No config found for agent {agent_id}, creating default configuration")
-    
-    # Create minimal default configuration
     config = {
         'agent_id': agent_data['agent_id'],
         'name': agent_data.get('name', 'Unnamed Agent'),
@@ -101,7 +97,7 @@ def extract_agent_config(agent_data: Dict[str, Any], version_data: Optional[Dict
         'current_version_id': agent_data.get('current_version_id'),
         'version_name': 'v1',
         'system_prompt': 'You are a helpful AI assistant.',
-        'model': None,  # No model specified for default config
+        'model': None,
         'configured_mcps': [],
         'custom_mcps': [],
         'agentpress_tools': {},
@@ -120,8 +116,7 @@ def build_unified_config(
     agentpress_tools: Dict[str, Any],
     configured_mcps: List[Dict[str, Any]],
     custom_mcps: Optional[List[Dict[str, Any]]] = None,
-    avatar: Optional[str] = None,
-    avatar_color: Optional[str] = None,
+    profile_img_url: Optional[str] = None,
     suna_metadata: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
     simplified_tools = {}
@@ -139,8 +134,7 @@ def build_unified_config(
             'custom_mcp': custom_mcps or []
         },
         'metadata': {
-            'avatar': avatar,
-            'avatar_color': avatar_color
+            'profile_img_url': profile_img_url
         }
     }
     
