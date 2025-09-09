@@ -1,5 +1,6 @@
 'use server';
 
+import { createTrialCheckout } from '@/lib/api/billing-v2';
 import { createClient } from '@/lib/supabase/server';
 import { redirect } from 'next/navigation';
 
